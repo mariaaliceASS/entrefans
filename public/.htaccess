@@ -1,0 +1,10 @@
+# Hospedagem (Apache): front-end (pasta dist) na raiz e a pasta backend ao lado dele.
+RewriteEngine On
+# /api/... -> API em PHP
+RewriteRule ^api(/.*)?$ backend/index.php [L,QSA]
+# /uploads/... -> fotos de perfil salvas pelo PHP
+RewriteRule ^uploads/(.*)$ backend/uploads/$1 [L]
+# Qualquer outra rota que não seja arquivo real -> index.html (React Router cuida do resto)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]

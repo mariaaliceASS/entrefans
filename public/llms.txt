@@ -1,0 +1,10 @@
+# EntreFans
+
+> Rede social brasileira para fãs encontrarem pessoas com os mesmos interesses (K-pop, anime, games, séries, RPG de mesa, livros) perto de onde vivem e combinarem "rolês" presenciais ou online.
+
+- [Fandoms](/fandoms): lista pública dos fandoms, com número de fãs e de rolês abertos.
+- [Mural de rolês](/mural): convites abertos de fãs (shows, maratonas, mesas de RPG, convenções).
+- [Termos, privacidade (LGPD) e política de plágio](/termos)
+- [Fale conosco](/contato)
+
+Privacidade: a localização é só aproximada (cidade e faixa de distância); endereço exato nunca é guardado.
