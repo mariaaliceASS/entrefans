@@ -9,10 +9,12 @@ import LocalizacaoPicker from '../components/Localizacao'
 import { RedesEditor } from '../components/RedesSociais'
 import { Icon } from '../components/Header'
 
+const COMANDO_BIO = '/bio-auto'
+
 export default function MeuPerfil() {
   const { logout, refresh } = useAuth(); const nav = useNavigate()
   const [p, setP] = useState<Perfil | null>(null); const [ints, setInts] = useState<number[]>([]); const [msg, setMsg] = useState('')
-  const [ia, setIa] = useState({ estilo: 'divertida', carregando: false, erro: '' })
+  const [ia, setIa] = useState({ carregando: false, erro: '' })
   useEffect(() => { api.get<Perfil>('/perfis/me').then(x => { setP(x); setInts(x.interesses.map(i => i.id)) }) }, [])
   if (!p) return <p className="text-on-surface-variant">Carregando…</p>
   const salvar = async () => {
@@ -24,11 +26,21 @@ export default function MeuPerfil() {
       setP(novo); await refresh(); setMsg('Alterações salvas!')
     } catch (e) { setMsg((e as Error).message) }
   }
-  // Recurso com LLM: o backend manda os interesses salvos para o Gemini e devolve uma sugestão de bio
-  const sugerirBio = async () => {
-    setIa({ ...ia, carregando: true, erro: '' })
-    try { const r = await api.post<{ bio: string }>('/ia/bio', { estilo: ia.estilo }); setP({ ...p, bio: r.bio }); setIa({ ...ia, carregando: false, erro: '' }) }
-    catch (e) { setIa({ ...ia, carregando: false, erro: (e as Error).message }) }
+  // Recurso com LLM: o backend manda os interesses salvos (e o que já foi escrito no campo) para o Gemini.
+  // Disparado de dentro do campo: Tab com o campo vazio, ou digitando /bio-auto.
+  const sugerirBio = async (descricao: string) => {
+    setP({ ...p, bio: descricao }); setIa({ carregando: true, erro: '' })
+    try {
+      const r = await api.post<{ bio?: string }>('/ia/bio', { descricao })
+      if (typeof r.bio !== 'string' || !r.bio) throw new Error('A IA não respondeu agora. Tente de novo em instantes.')
+      const bio = r.bio
+      setP(atual => atual && { ...atual, bio }); setIa({ carregando: false, erro: '' })
+    }
+    catch (e) { setIa({ carregando: false, erro: (e as Error).message }) }
+  }
+  const mudarBio = (texto: string) => {
+    if (texto.toLowerCase().includes(COMANDO_BIO)) sugerirBio(texto.replace(new RegExp(COMANDO_BIO, 'gi'), '').trim())
+    else setP({ ...p, bio: texto })
   }
   return (
     <div className="space-y-5">
@@ -42,13 +54,18 @@ export default function MeuPerfil() {
         <div><label className="label" htmlFor="mp-nome">Nome de exibição</label><input id="mp-nome" className="input" required minLength={2} maxLength={80} value={p.nome} onChange={e => setP({ ...p, nome: e.target.value })} /></div>
         <div>
           <label className="label" htmlFor="mp-bio">Bio ({p.bio.length}/140)</label>
-          <textarea id="mp-bio" className="input" rows={3} maxLength={140} value={p.bio} onChange={e => setP({ ...p, bio: e.target.value })} />
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <select className="input !w-auto" aria-label="Estilo da bio" value={ia.estilo} onChange={e => setIa({ ...ia, estilo: e.target.value })}>
-              <option value="divertida">Divertida</option><option value="fofa">Fofa</option><option value="direta">Direta</option></select>
-            <button type="button" disabled={ia.carregando} onClick={sugerirBio} className="btn-ghost"><Icon n="auto_awesome" />{ia.carregando ? 'Pensando…' : 'Sugerir bio com IA'}</button>
-            <span className="text-xs text-on-surface-variant">Usa os interesses já salvos. Revise antes de salvar.</span>
-          </div>
+          <textarea id="mp-bio" className="input" rows={3} maxLength={140} value={p.bio} readOnly={ia.carregando} aria-busy={ia.carregando}
+            aria-describedby="mp-bio-dica" placeholder={`Aperte Tab ou digite ${COMANDO_BIO} para criar uma bio a partir dos seus interesses`}
+            onChange={e => mudarBio(e.target.value)}
+            onKeyDown={e => {
+              // Tab só gera com o campo vazio; com texto, segue o comportamento normal (ir para o próximo campo)
+              if (e.key === 'Tab' && !e.shiftKey && !p.bio.trim() && !ia.carregando) { e.preventDefault(); sugerirBio('') }
+            }} />
+          <p id="mp-bio-dica" className="mt-1 flex items-center gap-1 text-xs text-on-surface-variant" aria-live="polite">
+            <Icon n="auto_awesome" />
+            {ia.carregando ? 'Criando sua bio com IA…'
+              : <>Campo vazio + <kbd className="font-mono font-bold">Tab</kbd>, ou <kbd className="font-mono font-bold">{COMANDO_BIO}</kbd> depois de escrever um pouco sobre você. Revise antes de salvar.</>}
+          </p>
           {ia.erro && <p className="mt-1 text-xs text-error">{ia.erro}</p>}
         </div>
       </section>

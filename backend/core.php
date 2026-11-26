@@ -7,7 +7,7 @@ date_default_timezone_set('America/Sao_Paulo'); // horário dos logs igual ao do
 function cfg(): array { static $c; return $c ??= require __DIR__ . '/config/config.php'; }
 
 /** Responde em JSON e encerra. */
-function out($data, int $code = 200): never { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE); exit; }
+function out($data, int $code = 200): never { http_response_code($code); echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE); exit; }
 /** Responde com erro ({"erro": "..."}) e encerra. */
 function fail(string $msg, int $code = 400): never { LogService::erroValidacao($msg, $code); out(['erro' => $msg], $code); }
 /** Corpo da requisição (JSON) como array. */

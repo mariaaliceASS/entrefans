@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Link, Navigate, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import JanelaAuth, { AlertaErro, Campo } from '../components/JanelaAuth'
+import JanelaAuth, { AlertaErro, Campo, InputSenha } from '../components/JanelaAuth'
 import Seo from '../components/Seo'
 import { type Erros, validarCadastro } from '../services/validacao'
 
@@ -24,9 +24,11 @@ export default function Cadastro() {
     try { await register({ ...f, username: f.username.trim().toLowerCase(), email: f.email.trim() }); nav('/onboarding') }
     catch (er) { setErro((er as Error).message) } finally { setBusy(false) }
   }
-  const input = (k: 'nome' | 'username' | 'email' | 'senha' | 'confirmar_senha', props: React.InputHTMLAttributes<HTMLInputElement>) =>
-    <input id={`c-${k}`} className={`y2k-input ${erros[k] ? '!border-error' : ''}`} required value={f[k]} onChange={set(k)}
-      aria-invalid={!!erros[k]} aria-describedby={erros[k] ? `c-${k}-erro` : undefined} {...props} />
+  const input = (k: 'nome' | 'username' | 'email' | 'senha' | 'confirmar_senha', props: React.InputHTMLAttributes<HTMLInputElement>) => {
+    const comuns = { id: `c-${k}`, required: true, value: f[k], onChange: set(k), 'aria-invalid': !!erros[k], 'aria-describedby': erros[k] ? `c-${k}-erro` : undefined }
+    if (props.type === 'password') { const { type: _t, ...resto } = props; return <InputSenha {...comuns} className={erros[k] ? '!border-error' : ''} {...resto} /> }
+    return <input {...comuns} className={`y2k-input ${erros[k] ? '!border-error' : ''}`} {...props} />
+  }
 
   return (
     <JanelaAuth titulo="Criar conta" subtitulo="Leva 1 minuto. Depois você escolhe sua cidade e seus fandoms.">

@@ -1,7 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { Link, Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import JanelaAuth, { AlertaErro, Campo } from '../components/JanelaAuth'
+import JanelaAuth, { AlertaErro, Campo, InputSenha } from '../components/JanelaAuth'
 import Seo from '../components/Seo'
 
 /** Para onde voltar depois de entrar (?voltar=/role/3). Só caminhos internos. */
@@ -28,7 +28,7 @@ export default function Login() {
           <input id="f-login" className="y2k-input" required autoComplete="username" maxLength={150} value={f.login} onChange={e => setF({ ...f, login: e.target.value })} />
         </Campo>
         <Campo id="f-senha" label="Senha">
-          <input id="f-senha" className="y2k-input" type="password" required autoComplete="current-password" value={f.senha} onChange={e => setF({ ...f, senha: e.target.value })} />
+          <InputSenha id="f-senha" required autoComplete="current-password" value={f.senha} onChange={e => setF({ ...f, senha: e.target.value })} />
         </Campo>
         <div className="text-right"><Link to="/esqueci-senha" className="font-mono text-xs font-bold uppercase text-[var(--y2k)] hover:underline">Esqueci minha senha</Link></div>
         {erro && <AlertaErro msg={erro} />}

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useState, type InputHTMLAttributes, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 
 /** Janela estilo Y2K usada nas telas de login, cadastro e recuperação de senha. */
@@ -53,7 +53,22 @@ export function Campo({ id, label, erro, children }: { id: string; label: string
   )
 }
 
-export const AlertaErro = ({ msg }: { msg: string }) =>
+/** Campo de senha com botão para mostrar/esconder o que foi digitado. */
+export function InputSenha({ className = '', ...props }: Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>) {
+  const [visivel, setVisivel] = useState(false)
+  return (
+    <div className="relative">
+      <input {...props} type={visivel ? 'text' : 'password'} className={`y2k-input pr-20 ${className}`} />
+      <button type="button" onClick={() => setVisivel(v => !v)} aria-pressed={visivel} aria-controls={props.id}
+        aria-label={visivel ? 'Esconder senha' : 'Mostrar senha'}
+        className="absolute inset-y-0 right-0 px-3 font-mono text-[11px] font-bold uppercase tracking-wider text-[var(--y2k)] hover:underline">
+        {visivel ? 'Ocultar' : 'Ver'}
+      </button>
+    </div>
+  )
+}
+
+export const AlertaErro =({ msg }: { msg: string }) =>
   <p role="alert" className="border-2 border-error bg-error-container/30 px-3 py-2 text-sm text-on-error-container"><span className="font-mono font-bold">⚠ ERRO:</span> {msg}</p>
 export const AlertaOk = ({ msg }: { msg: string }) =>
   <p role="status" className="border-2 border-tertiary bg-background px-3 py-2 text-sm text-tertiary"><span className="font-mono font-bold">✔</span> {msg}</p>
