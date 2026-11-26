@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Troque "seu-dominio.com.br" pelo endereço do site hospedado -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://seu-dominio.com.br/fandoms</loc><changefreq>daily</changefreq></url>
-  <url><loc>https://seu-dominio.com.br/mural</loc><changefreq>hourly</changefreq></url>
-  <url><loc>https://seu-dominio.com.br/cadastro</loc></url>
-  <url><loc>https://seu-dominio.com.br/login</loc></url>
-  <url><loc>https://seu-dominio.com.br/termos</loc></url>
-  <url><loc>https://seu-dominio.com.br/contato</loc></url>
+  <url><loc>https://entrefans.pagina-oficial.com/fandoms</loc><changefreq>daily</changefreq></url>
+  <url><loc>https://entrefans.pagina-oficial.com/mural</loc><changefreq>hourly</changefreq></url>
+  <url><loc>https://entrefans.pagina-oficial.com/cadastro</loc></url>
+  <url><loc>https://entrefans.pagina-oficial.com/login</loc></url>
+  <url><loc>https://entrefans.pagina-oficial.com/termos</loc></url>
+  <url><loc>https://entrefans.pagina-oficial.com/contato</loc></url>
 </urlset>
+m

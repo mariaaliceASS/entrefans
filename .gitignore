@@ -4,3 +4,5 @@ backend/uploads/*
 !backend/uploads/.htaccess
 backend/logs/*
 !backend/logs/.htaccess
+backend/config/email.php
+backend/vendor/

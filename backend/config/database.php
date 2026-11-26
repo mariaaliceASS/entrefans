@@ -1,8 +1,4 @@
 <?php
-/**
- * Arquivo SÓ de conexão com o banco (MySQL/MariaDB via PDO).
- * Na hospedagem, troque host, nome do banco, usuário e senha pelos dados criados no painel.
- */
 const DB_HOST = '127.0.0.1';
 const DB_PORT = 3306;
 const DB_NAME = 'entrefans';

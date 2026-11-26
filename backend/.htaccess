@@ -1,3 +1,5 @@
 RewriteEngine On
+# Bloqueia acesso direto às bibliotecas do Composer e aos arquivos dele
+RewriteRule ^(vendor/|composer\.(json|lock)$) - [F,L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]

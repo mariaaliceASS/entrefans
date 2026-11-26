@@ -3,8 +3,8 @@
 Rede para fãs encontrarem pessoas com os mesmos interesses (K-pop, anime, games, séries, RPG, livros) perto de onde vivem
 e combinarem **rolês** (encontros presenciais ou online).
 
-- **Aplicação hospedada:** https://SEU-DOMINIO.com.br  ← _preencher_
-- **Repositório (público):** https://github.com/SEU-USUARIO/entrefans  ← _preencher_
+- **Aplicação hospedada:** https://entrefans.pagina-oficial.com
+- **Repositório (público):** https://github.com/mariaaliceASS/entrefans
 - **Banco de dados (export):** [`backend/database/entrefans.sql`](backend/database/entrefans.sql)
 - **Conta de teste:** login `demo` (ou `demo@entrefans.com`) · senha `demo12345`
 
